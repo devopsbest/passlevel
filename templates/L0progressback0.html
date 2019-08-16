@@ -1,0 +1,211 @@
+{% extends 'layout.html' %}
+{% block title %}{{ 'pass L0 progress for s18' }}{% endblock %}
+{% block body %}
+    <h5>
+        This tool can pass progress for L0
+    </h5>
+    <p>please input the memberid and select env</p>
+
+
+    <div id="app">
+
+        {% raw %}
+        <div>
+            <select v-model="selected" class="ui selection dropdown">
+                <option disabled value="">请选择</option>
+                <option :value="env.name" v-for="env in envList">{{env.id}}</option>
+            </select>
+            <div class="ui input">
+
+                <input v-model="message" placeholder="memberid...">
+
+
+
+
+            </div>
+        </div>
+        <span>You current select: {{ selected }}</span>
+        <p></p>
+        <span>Memberid: {{ message }}</span>
+
+        <p class="ui divider"></p>
+        <div class="ui  checkbox">
+            <input type="checkbox" id="checkbox" v-model="checkvalue" data-tooltip="This will select all units">
+            <label>All</label>
+
+        </div>
+        <p class="ui divider"></p>
+
+        <div class="ui form">
+            <div class="inline fields">
+
+                <p v-for="(item,index) in unitList">
+
+
+                    <input type="checkbox" :id="index" :value="item.id" v-model="mychoice" :disabled="disabled">
+                    <label>{{ item.name }}</label>
+
+
+                </p>
+            </div>
+        </div>
+
+        <p v-show="checkvalue">
+        You have select all units
+        </p>
+
+        <p v-if="select_show">
+
+        <label>my choice is {{ mychoice }}</label>
+                    </p>
+
+
+         <button class="ui primary button" @click="get_pass_l0" :class="{loading:loaded}">Submit</button>
+
+
+
+        <div class="ui icon message" :class="{hidden: show }">
+            <i class="notched circle loading icon"></i>
+            <div class="content">
+                <div class="header">waiting</div>
+                <p>please wait, it maybe take one minute</p>
+            </div>
+        </div>
+
+        
+
+        {% endraw %}
+    </div>
+
+
+    <script>
+
+        var app1 = new Vue({
+            el: '#app',
+            data: {
+                message: '',
+                selected: '',
+                password: '',
+                mychoice: [],
+                checkvalue: false,
+                envList: [
+                    {
+                        id: 'uat',
+                        name: 'mobilefirst',
+                    },
+                    {
+                        id: 'qa',
+                        name: 'qa',
+                    },
+                    {
+                        id: 'stg',
+                        name: 'staging',
+                    }
+                ],
+                unitList: [
+                    {
+                        id: 1,
+                        name: 'Unit1',
+                    },
+                    {
+                        id: 2,
+                        name: 'Unit2',
+                    },
+                    {
+                        id: 3,
+                        name: 'Unit3',
+                    },
+                    {
+                        id: 4,
+                        name: 'Unit4',
+                    },
+                    {
+                        id: 5,
+                        name: 'Unit5',
+                    },
+                    {
+                        id: 6,
+                        name: 'Unit6',
+                    },
+                    {
+                        id: 7,
+                        name: 'Unit7',
+                    },
+                    {
+                        id: 8,
+                        name: 'Unit8',
+                    },
+                    {
+                        id: 9,
+                        name: 'Unit9',
+                    },
+                    {
+                        id: 10,
+                        name: 'Unit10',
+                    }
+
+                ],
+                loaded: false,
+                show: true,
+                seen: false,
+                disabled:false,
+                select_show:true,
+            },
+
+            watch:{
+                checkvalue(val){
+                    this.disabled= !this.disabled;
+
+
+                }
+            },
+
+
+            methods: {
+
+                get_pass_l0() {
+                    this.loaded = true;
+
+                    this.show = false;
+                    this.see = true;
+                    axios.get('/l0progress', {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        crossDomain: true,
+                        contentType: "application/json",
+                        params: {
+                            memberid: this.message,//接口配置参数（相当于url?id=xxxx)
+                            env: this.selected,
+                            all: this.checkvalue,
+                            choice: JSON.stringify(this.my_choice),
+
+                        },
+                    })
+
+                        .then((response) => {
+                            this.password = response.data['sqlresult'];
+                            {#this.message = response.data['message'];#}
+                            this.loaded = false;
+
+                            this.show = true;
+                            this.see = false;
+
+                            console.log(response.data['sqlresult']);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                }
+
+
+            }
+        })
+
+
+    </script>
+{% endblock %}
+
+</body>
+</html>

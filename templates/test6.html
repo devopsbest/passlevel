@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.css" rel="stylesheet">
+</head>
+<body>
+{% raw %}
+<div id="app">
+　　<input type="text" v-model="a.a1.a12"/>{{a.a1.a12}}
+
+　　<input type="text" v-model="a.a2.a22"/>{{a.a2.a22}}
+</div>
+{% endraw %}
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+
+            a: {
+
+                a1: {
+
+                    a12: 12
+
+                },
+
+                a2: {
+
+                    a22: 15
+
+                }
+
+            }
+
+        },
+
+        watch: {
+
+            a: {
+
+                handler(val, oldval) {
+
+                    if (val.a1.a12 < val.a2.a22) {
+
+                        val.a2.a22 = val.a1.a12;
+
+                    }
+
+                },
+
+                deep: true
+
+            }
+
+        }
+    })
+
+</script>
+
+</body>
+</html>

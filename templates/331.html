@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+{% block title %}{{ 'pass 331 for s18' }}{% endblock %}
+{% block body %}
+
+    {% raw %}
+    <div id="app">
+
+
+        <div class="my place" >
+            <label>
+                This tool only used in UAT for s18 account pass 331
+            </label>
+            <p>please input the memberid</p>
+
+            <div class="ui input">
+
+                <input v-model="message" placeholder="memberid...">
+
+
+                <button class="ui primary button" @click="get_password" :class="{loading:loaded}">Submit</button>
+
+            </div>
+
+
+            <div class="ui icon message" :class="{hidden: show }">
+                <i class="notched circle loading icon"></i>
+                <div class="content">
+                    <div class="header">稍候</div>
+                    <p>我们正在为您获取内容。</p>
+                </div>
+            </div>
+
+
+            <p v-show="seen">
+                result: {{ password }}
+            </p>
+
+
+            <p v-if="seen">
+
+                {{ password }}
+            </p>
+        </div>
+
+    </div>
+    {%  endraw %}
+    <script>
+
+        var app1 = new Vue({
+            el: '#app',
+            data: {
+                message: '',
+                password: '',
+                loaded: false,
+                show: true,
+                seen: false,
+            },
+
+            methods: {
+                get_password() {
+
+                    this.loaded = true;
+                    this.show = false;
+
+                    axios.get('/accounts', {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        crossDomain: true,
+                        contentType: "application/json",
+                        params: {
+                            account: this.message,//接口配置参数（相当于url?id=xxxx）
+                        },
+                    })
+
+                        .then((response) => {
+                            this.password = response.data['password'];
+                            this.seen = true;
+                            this.loaded = false;
+                            this.show = true;
+
+                            console.log(response.data['password']);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                }
+            }
+
+        })
+
+
+    </script>
+{% endblock %}
+
+</body>
+</html>

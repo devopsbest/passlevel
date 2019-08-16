@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Password</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.css" rel="stylesheet">
+
+</head>
+<body>
+<h5>
+    This tool only used in UAT for s18 account pass 331
+</h5>
+<p>please input the memberid</p>
+{% raw %}
+<div id="app">
+
+    <input v-model="message">
+
+    <button class="ui primary button" @click="get_password" >Submit</button>
+    <p v-if="seen">Done!</p>
+
+
+</div>
+{%  endraw %}
+<script>
+
+    var app1 = new Vue({
+        el: '#app',
+        data: {
+            message: '',
+            password: "",
+            seen: false,
+        },
+
+        methods: {
+            get_password() {
+                axios.get('/accounts', {
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    crossDomain: true,
+                    contentType: "application/json",
+                    params: {
+                        account: this.message,//接口配置参数（相当于url?id=xxxx）
+                    },
+                })
+
+                    .then((response) => {
+                        this.password = response.data['password'];
+                        this.seen = true
+
+                        this.password = response.data;
+                        console.log(response.data['password']);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+            }
+        }
+
+    })
+
+
+</script>
+
+</body>
+</html>

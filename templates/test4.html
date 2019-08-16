@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+{% raw %}
+<select class="ui dropdown"> v-model="couponSelected" @change="getCouponSelected">
+    <option :value="coupon.id" v-for="coupon in couponList" >{{coupon.name}}</option>
+</select>
+    {% endraw %}
+</div>
+<script>
+var vm = new Vue({
+                el: '#app',
+                data:{
+                    couponList:[
+                        {
+                            id: 'A',
+                            name: '优惠券1'
+                        },
+                        {
+                            id: '1',
+                            name: '优惠券2'
+                        },
+                        {
+                            id: '2',
+                            name: '优惠券3'
+                        }
+                    ],
+                    couponSelected: '',
+                },
+                created(){
+　　　　　　　　　　　　//如果没有这句代码，select中初始化会是空白的，默认选中就无法实现
+                    this.couponSelected = this.couponList[0].id;
+                },
+                methods:{
+
+　　　　　　　　　　　　getCouponSelected(){
+                        //获取选中的优惠券
+                        console.log(this.couponSelected)
+                    }
+
+
+                }
+            })
+
+        </script>
+
+</body>
+</html>

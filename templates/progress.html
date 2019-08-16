@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+{% block title %}{{ 'pass 331 for s18' }}{% endblock %}
+{% block body %}
+    <h5>
+        This tool can pass progress for whole unit
+    </h5>
+    <p>please input the memberid</p>
+    {% raw %}
+    <div id="app">
+    <div>
+
+        <select v-model="selected" class="ui selection dropdown">
+            <option disabled value="">请选择</option>
+            <option :value="env.name" v-for="env in envList">{{env.id}}</option>
+        </select>
+                <div class="ui input">
+
+            <input v-model="message" placeholder="memberid...">
+
+
+            <button class="ui primary button" @click="get_pass" :class="{loading:loaded}">Submit</button>
+
+        </div>
+        </div>
+        <span>Selected: {{ selected }}</span>
+
+    <div class="ui icon message" :class="{hidden: show }">
+        <i class="notched circle loading icon"></i>
+        <div class="content">
+            <div class="header">稍候</div>
+            <p>我们正在为您获取内容。</p>
+        </div>
+    </div>
+
+
+    <p v-show="seen">
+        result: {{ password }}
+    </p>
+
+
+    </div>
+    {% endraw %}
+
+    <script>
+
+        var app1 = new Vue({
+            el: '#app',
+            data: {
+                message: '',
+                selected: '',
+                password: '',
+                envList: [
+                    {
+                        id: 'uat',
+                        name: 'mobilefirst',
+                    },
+                    {
+                        id: 'qa',
+                        name: 'qa',
+                    },
+                    {
+                        id: 'stg',
+                        name: 'staging',
+                    }
+                ],
+                loaded: false,
+                show: true,
+                seen: false,
+            },
+
+            methods: {
+
+                get_pass() {
+                    this.loaded = true;
+
+                    this.show = false;
+                    this.see = true;
+                    axios.get('/progress', {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        crossDomain: true,
+                        contentType: "application/json",
+                        params: {
+                            memberid: this.message,//接口配置参数（相当于url?id=xxxx)
+                            env: this.selected,
+                        },
+                    })
+
+                        .then((response) => {
+                            this.password = response.data['result'];
+                            this.loaded = false;
+
+                            this.show = true;
+                            this.see = false;
+
+                            console.log(response.data['result']);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                }
+
+
+            }
+        })
+
+
+    </script>
+{% endblock %}
+
+</body>
+</html>

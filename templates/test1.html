@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>www.jb51.net vue下拉框</title>
+    <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.css" rel="stylesheet">
+</head>
+<body>
+{% raw %}
+<div class="ui menu">
+    <div class="item">
+        <a href="">首页</a>
+    </div>
+    <div class="item">
+        <a href="">今日热点</a>
+    </div>
+    <div class="item">
+        <a href="">免责申明</a>
+    </div>
+</div>
+<div id="app">
+    <select v-model="one">
+        <option v-for="x in shuju">{{x.name}}{{x.famname}}</option>
+    </select><br>
+    <div>
+        <span>{{one}}</span><br>
+        <span>{{oneF}}</span><br>
+        <span>{{oneL}}</span>
+    </div>
+</div>
+<div class="eight wide field">
+    <label for="accountType">Account Type</label>
+    <div class="field" style="margin-top: 0.9em">
+        <div class="ui checkbox">
+            <input type="radio" name="accountType" value="E10" class="hidden accountType">
+            <label>E10</label>
+        </div>
+        <div class="ui checkbox">
+            <input type="radio" name="accountType" value="S15" class="hidden accountType">
+            <label>Smart V1</label>
+        </div>
+        <div class="ui checkbox">
+            <input type="radio" name="accountType" checked value="S15_V2"
+                   class="hidden accountType">
+            <label>Smart V2</label>
+        </div>
+        <div class="ui checkbox">
+            <input type="radio" name="accountType" value="ECLite" class="hidden accountType">
+            <label>EC Lite</label>
+        </div>
+    </div>
+</div>
+
+
+{% endraw %}
+<div class="ui fixed inverted menu" id="main-nav">
+  <a class="active item" href="{{url_for('index') }}">社论</a>
+  <a class="item" href="{{url_for('test') }}" data-tooltip="Skip">Reviews</a>
+  <a class="item" href="{{url_for ('test1') }}">即将举办的活动</a>
+</div>
+
+<div class="ui toggle checkbox">
+  <input type="checkbox" name="public">
+  <label>Subscribe to weekly newsletter</label>
+</div>
+
+<script>
+    let rua = new Vue({
+        el: "#app",
+        data: {
+            shuju: [
+                {name: "孙", famname: "悟空"},
+                {name: "猪", famname: "八戒"},
+                {name: "沙", famname: "悟净"}
+            ],
+            one: ""
+        },
+        computed: {
+            oneF() {
+                return this.one.charAt(0);
+            },
+            oneL() {
+                return this.one.slice(1, 3);
+            }
+        }
+    });
+</script>
+</body>
+</html>
